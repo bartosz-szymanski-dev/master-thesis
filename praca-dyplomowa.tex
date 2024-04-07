@@ -1,6 +1,8 @@
 \documentclass[12pt,twoside]{book}
 \usepackage[a4paper,inner=3.5cm,outer=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
 \usepackage{fontspec}
+\usepackage{polski}
+\usepackage[polish]{babel}
 \setmainfont{Times New Roman}
 \usepackage{setspace}
 \setstretch{1.5}
@@ -48,6 +50,7 @@
 \usepackage{lipsum}
 \usepackage{pdfpages}
 \usepackage{tocloft}
+\usepackage{cite}
 
 
 \renewcommand{\contentsname}{Spis treści}
@@ -67,5 +70,10 @@
 % Tutaj zaczyna się główna treść pracy
 \chapter{Wprowadzenie}
 \lipsum[1-4] % Generuje przykładowy tekst
+
+Bbkabva \cite{przyklad2, przyklad1}
+
+\bibliographystyle{IEEEtran}
+\bibliography{bibliography}
 
 \end{document}
