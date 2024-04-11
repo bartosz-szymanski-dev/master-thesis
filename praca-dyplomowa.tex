@@ -1,12 +1,15 @@
 \documentclass[12pt,twoside]{book}
+
 \usepackage[a4paper,inner=3.5cm,outer=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
 \usepackage{fontspec}
 \usepackage{polski}
 \usepackage[polish]{babel}
-\setmainfont{Times New Roman}
 \usepackage{setspace}
-\setstretch{1.5}
 \usepackage{fancyhdr}
+\usepackage{titlesec}
+
+\setmainfont{Times New Roman}
+\setstretch{1.5}
 \pagestyle{fancy}
 \fancyhf{}
 \fancyfoot[CE,CO]{\thepage}
@@ -17,8 +20,7 @@
   \fancyfoot[CE,CO]{\thepage}%
 }
 
-% Formatting
-\usepackage{titlesec}
+
 
 % Konfiguracja nagłówków
 % Nagłówek 1. stopnia: 12 pkt, WERSALIKI, pogrubiona
@@ -52,6 +54,10 @@
 \usepackage{tocloft}
 \usepackage{cite}
 \usepackage{indentfirst}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage[font=normalsize,labelfont=bf]{caption} % Konfiguracja podpisów
+\usepackage[hidelinks]{hyperref}
 
 \renewcommand{\contentsname}{Spis treści}
 \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
@@ -60,17 +66,21 @@
 
 \setlength{\parindent}{1.25cm}
 
-\usepackage{graphicx}
-\usepackage[font=normalsize,labelfont=bf]{caption} % Konfiguracja podpisów
-
 \captionsetup[figure]{
   labelsep=period, % Ustawienie kropki zamiast dwukropka
   justification=centering, % Wyśrodkowanie podpisu
   font=normalsize, % Rozmiar czcionki podpisu
   textfont=normalfont, % Styl czcionki podpisu
   labelfont=normalfont, % Pogrubienie etykiety "Rys."
-  name=Rys. % Zmiana nazwy "Rysunek" na "Rys."
+  name=Rys., % Zmiana nazwy "Rysunek" na "Rys."
+  skip=12pt %Ustawienie dolnego odstępu podpisu
 }
+
+% Dodanie odstępu przed podpisem rysunku
+\newcommand{\captionvspace}{\vspace{6pt}}
+
+% Dostosowanie odstępów dla środowiska 'itemize'
+\setlist[itemize]{topsep=0pt,partopsep=0pt}
 
 \begin{document}
 
@@ -99,6 +109,7 @@ Motywacją do podjęcia tematu pracy są doświadczenia autora na tle zawodowym,
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\textwidth]{includes/images/precedence-research.png}
+\captionvspace
 \caption{Wykres przedstawiający prognozę wzrostu udziału rynkowego technologii chmurowej}
 \label{fig:precedence-research}
 \end{figure}
@@ -112,10 +123,10 @@ Rezultatem niniejszej pracy dyplomowej jest rozebranie monolitycznego systemu na
 Zgodnie z stanem aplikacji z dnia 11.06.2022r. projekt “System do internetowego wspomagania pacjenta i lekarza” oparty jest o kilka składowych jakie należy wyróżnić, a są nimi:
 
 \begin{itemize}
-\item Baza danych oprata o silnik MySQL.
-\item Trzon logiki biznesowej oparty o zestaw narzędzi Symfony w wersji 5.4.
-\item Warstwa widoku aplikacji oparta o silnik Twig oraz Vue.js.
-\item Silnik nginx jako narzędzie do przekazania zapytania klienckiego do logiki biznesowej.
+\item baza danych oprata o silnik MySQL,
+\item trzon logiki biznesowej oparty o zestaw narzędzi Symfony w wersji 5.4,
+\item warstwa widoku aplikacji oparta o silnik Twig oraz Vue.js,
+\item silnik nginx jako narzędzie do przekazania zapytania klienckiego do logiki biznesowej.
 \end{itemize}
 
 Wyróżnione komponenty są ściśle ze sobą połączone. Logika biznesowa oraz baza danych są nierozerwalne, logika biznesowa posiada klasy encji, które bezpośrednio przekładają się na tabele w bazie danych. Logika biznesowa również decyduje o tym jaki widok jest obecnie wyświetlany, a warstwa widoku bazuje na tym, co dostarczył kontroler Symfony. Cały zestaw wykorzystuje narzędzie nginx do tego, by otrzymać zapytanie od klienta. W niniejszym rodziale zostaną przedstawione kolejno wyżej wymienione komponenty z szerszym opisem co do każdego z nich.
@@ -127,11 +138,12 @@ Symfony jako framework, który za zadanie ma ułatwić rozwój oprogramowania in
 \begin{figure}[ht]
 \centering
 \includegraphics[width=\textwidth]{includes/images/symfony-metadata-scheme.png}
+\captionvspace
 \caption{Schemat metamodelu Symfony \cite{mod.driv.arch.symf}}
 \label{fig:symfony-metadata-scheme}
 \end{figure}
 
-W celu odzwierciedlenia domen aktorów, w projekcie została wykorzystana biblioteka Doctrine, wspierana przez Symfony. Samo Doctrine to narzędzie do maniplacji bazą danych przy wykorzystaniu obiektów PHP \cite{symf.5}.
+W celu odzwierciedlenia domen aktorów, w projekcie została wykorzystana biblioteka Doctrine, wspierana przez Symfony. Samo Doctrine to narzędzie do manipulacji bazą danych przy wykorzystaniu obiektów PHP \cite{symf.5}. By zainicjować dane w systemie bez konieczności manualnego wprowadzania ich autor wykorzystał dedykowaną ku temu bibliotekę wykorzystującą mechanizm fabryki danych testowych (ang. Fixtures Factory). Sam mechanizm fabryki danych testowych w procesie tworzenia oprogramowania umożliwia uruchomienie systemu z wypełnioną bazą danych, tak by móc przeprowadzać wymagane akcje i sprawdzić poprawność logiki biznesowej \cite{fixtures}.
 
 \bibliographystyle{IEEEtran}
 \bibliography{bibliography.bib}
