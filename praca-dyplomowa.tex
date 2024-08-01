@@ -145,6 +145,34 @@ Symfony jako framework, który za zadanie ma ułatwić rozwój oprogramowania in
 
 W celu odzwierciedlenia domen aktorów, w projekcie została wykorzystana biblioteka Doctrine, wspierana przez Symfony. Samo Doctrine to narzędzie do manipulacji bazą danych przy wykorzystaniu obiektów PHP \cite{symf.5}. By zainicjować dane w systemie bez konieczności manualnego wprowadzania ich autor wykorzystał dedykowaną ku temu bibliotekę wykorzystującą mechanizm fabryki danych testowych (ang. Fixtures Factory). Sam mechanizm fabryki danych testowych w procesie tworzenia oprogramowania umożliwia uruchomienie systemu z wypełnioną bazą danych, tak by móc przeprowadzać wymagane akcje i sprawdzić poprawność logiki biznesowej \cite{fixtures}.
 
+\chapter{Planowanie architektury mikroserwisowej w chmurze AWS}
+Niniejszy rozdział pokrywa zagadnienie planowania architektury mikroserwisowej oraz wykorzystanych usług potrzebnych do realizacji celu uruchomienia platformy. Nie istnieje mapa działań jakie należy wykonać by zgodnie z sztuką podzielić aplikację monolityczną na zbiór mikroserwisów. Istnieją natomiast wskazówki, którymi można się posługiwać by ułatwić doprowadzenie tego przedsięwzięcia do końca, a są nimi:
+
+\begin{itemize}
+\item identyfikacja mikroserwisów,
+\item dbanie o szczególną troskę w procesie ekstrakcji modułów, które są kandydatami na mikroserwisy,
+\item wprowadzenie modelu heksagonalnego aplikacji. \cite{java.ee.8.design.patterns}
+\end{itemize}
+
+\section{Wybór odpowiednich usług do utrzymania aplikacji}
+W wyborze usług potrzebnych do użycia dla architektury mikroserwisowej, autor korzystał z własnych doświadczeń w pracy z platformą AWS. W związku z powyższym powody wyboru konkretnej usługi zostaną przedstawione w podrozdziale poświęconym na rzecz opisania motywacji doboru.
+
+\subsection{VPC - Virtual Private Cloud (ang. prywatna, wirtualna chmura)}
+Powody wyboru VPC dla celu realizacji architektury sieciowej:
+
+\begin{itemize}
+\item możliwość tworzenia wyizolowanych sieci w chmurze, co zapewnia wysoki standard bezpieczeństwa dla systemu, pozwala kontrolować ruch sieciowy przy pomocy reguł zapory sieciowej,
+\item możliwość kontrolowania adresacji IP, podsieci, tabel routingu i bram internetowych, co pozwala na dostosowanie sieci do indywidualnych potrzeb budowanego przez autora systemu. \cite{aws.vpc}
+\end{itemize}
+
+\subsection{ECS - Elastic Container Service (ang. elastyczny serwis kontenerów)}
+Wybór ECS jako usługi pozwalającej na uruchomienie mikroserwisów jest uargumentowany niniejszymi powodami:
+
+\begin{itemize}
+\item ułatwione zarządzanie kontenerami poprzez wbudowane narzędzia do orkiestracji nimi,
+\item możliwość uruchomienia kontenerów bez konieczności zarządzania architekturą serwerową. \cite{aws.ecs}
+\end{itemize}
+
 \bibliographystyle{IEEEtran}
 \bibliography{bibliography.bib}
 \listoffigures
