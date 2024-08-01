@@ -173,6 +173,54 @@ Wybór ECS jako usługi pozwalającej na uruchomienie mikroserwisów jest uargum
 \item możliwość uruchomienia kontenerów bez konieczności zarządzania architekturą serwerową. \cite{aws.ecs}
 \end{itemize}
 
+\subsection{RDS - Relational Database Service (ang. zarządzany serwis relacyjnych baz danych)}
+RDS jest idealnym wyborem do zarządzania bazami danych z następujących powodów:
+
+\begin{itemize}
+\item automatyzuje zadania typu tworzenie kopii zapasowych, aktualizacje oprogramowania oraz monitorowanie,
+\item posiada rozwiązania gwarantujące wysoką dostępność,
+\item oferuje szyfrowanie danych w spoczynku i w trakcie przesyłania oraz przy wykorzystaniu VPC do wyizolowania usługi zapewnia wysoki poziom bezpieczeństwa. \cite{aws.rds}
+\end{itemize}
+
+\subsection{Amazon MQ - Amazon Managed Message Broker Service  (ang. zarządzany broker komunikatów dostarczany przez Amazon)}
+Z racji wykorzystania protokołu AMQP w projekcie migracji systemu, Amazon MQ jest odpowowiednim wyborem do zarządzania komunikacją między mikroserwisami z następujących powodów:
+
+\begin{itemize}
+\item umożliwia zautomatyzowanie konfiguracji, skalowania i zarządzania infrastrukturą brokerską,
+\item obsługuje popularne protokoły wiadomości, takie jak: AMQP, MQTT oraz STOMP, najbardziej kluczowym dla aplikacji systemu do internetowego wspomagania pacjenta i lekarza jest AMQP,
+\item posiada wbudowane mechanizmy redundancji i automatycznego przełączania awaryjnego,
+\item oferuje szyfrowanie danych oraz izolację środowiska w VPC. \cite{aws.mq}
+\end{itemize}
+
+\subsection{IAM - Identity and Access Management (ang. zarządzanie tożsamością i dostępem)}
+Najważniejszymi powodami do wyboru IAM jako usuługi zarządzającej dostępem są:
+
+\begin{itemize}
+\item precyzyjne zarządzanie dostępem do wszystkich zasobów AWS,
+\item umożliwienie definiowania szczegółowych polityk uprawnień dla użytkowników, grup i ról,
+\item zapewnia wysoki poziom bezpieczeństwa poprzez funkcje takie jak dwuskładnikowe uwierzytelnianie (MFA), tymczasowe poświadczenia oraz możliwość monitorowania działań użytkowników,
+\item IAM udostępnia centralne zarządzanie tożsamościami i uprawnieniami, przez co upraszcza administrację i dodaje przejrzystości zarządzania dostępem. \cite{aws.iam}
+\end{itemize}
+
+\subsection{S3 - Simple Storage Service (ang. prosty magazyn danych)}
+Przechowywanie danych aplikacji to kluczowe zadanie, jakie zostało postawione usłudze S3, a jej wybór został podyktowany następującymi powodami:
+
+\begin{itemize}
+\item usługa ta automatycznie skaluje się w górę lub dół, przez co umożliwia praktycznie nieograniczone ilościowo składowanie danych,
+\item oferuje wysoką trwałość danych na poziomie bliskim 100\%, a także wysoką dostępność,
+\item zapewnia szyfrowanie danych, zarządzanie dostępem na poziomie obiektu oraz integrację z AWS IAM,
+\item umożliwia optymalizację kosztów na podstawie częstotliwości dostępu do danych i wymagań dotyczących trwałości. \cite{aws.s3}
+\end{itemize}
+
+\subsection{CloudWatch}
+Usługa o nazwie CloudWatch, w szerokim spektrum usług jakie oferuje platforma AWS, dedykowana jest monitorowaniu i logowaniu akcji wykonanych w samych usługach, jak i w kodzie aplikacji. To są powody jakie zostały uwzględnione przy podjęciu decyzji o skorzystaniu z niej:
+
+\begin{itemize}
+\item umożliwia centralne zarządzanie i analizę danych,
+\item oferuje zaawansowane możliwości monitorowania aplikacji i infrastruktury, a także konfigurację alarmów, które powiadamiają o problemach w czasie rzeczywistym,
+\item na podstawie logów zbieranych przez CloudWatch, można zautomatyzować uruchamianie akcji skalowania zasobów, czy też funkcji Lambda. \cite{aws.cloud.watch}
+\end{itemize}
+
 \bibliographystyle{IEEEtran}
 \bibliography{bibliography.bib}
 \listoffigures
