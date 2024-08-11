@@ -157,7 +157,7 @@ Niniejszy rozdział pokrywa zagadnienie planowania architektury mikroserwisowej 
 \section{Wybór odpowiednich usług do utrzymania aplikacji}
 W wyborze usług potrzebnych do użycia dla architektury mikroserwisowej, autor korzystał z własnych doświadczeń w pracy z platformą AWS. W związku z powyższym powody wyboru konkretnej usługi zostaną przedstawione w podrozdziale poświęconym na rzecz opisania motywacji doboru.
 
-\subsection{VPC - Virtual Private Cloud (ang. prywatna, wirtualna chmura)}
+\subsection{Amazon VPC - Virtual Private Cloud (ang. prywatna, wirtualna chmura)}
 Powody wyboru VPC dla celu realizacji architektury sieciowej:
 
 \begin{itemize}
@@ -165,7 +165,7 @@ Powody wyboru VPC dla celu realizacji architektury sieciowej:
 \item możliwość kontrolowania adresacji IP, podsieci, tabel routingu i bram internetowych, co pozwala na dostosowanie sieci do indywidualnych potrzeb budowanego przez autora systemu. \cite{aws.vpc}
 \end{itemize}
 
-\subsection{ECS - Elastic Container Service (ang. elastyczny serwis kontenerów)}
+\subsection{Amazon ECS - Elastic Container Service (ang. elastyczny serwis kontenerów)}
 Wybór ECS jako usługi pozwalającej na uruchomienie mikroserwisów jest uargumentowany niniejszymi powodami:
 
 \begin{itemize}
@@ -173,7 +173,7 @@ Wybór ECS jako usługi pozwalającej na uruchomienie mikroserwisów jest uargum
 \item możliwość uruchomienia kontenerów bez konieczności zarządzania architekturą serwerową. \cite{aws.ecs}
 \end{itemize}
 
-\subsection{RDS - Relational Database Service (ang. zarządzany serwis relacyjnych baz danych)}
+\subsection{Amazon RDS - Relational Database Service (ang. zarządzany serwis relacyjnych baz danych)}
 RDS jest idealnym wyborem do zarządzania bazami danych z następujących powodów:
 
 \begin{itemize}
@@ -192,7 +192,7 @@ Z racji wykorzystania protokołu AMQP w projekcie migracji systemu, Amazon MQ je
 \item oferuje szyfrowanie danych oraz izolację środowiska w VPC. \cite{aws.mq}
 \end{itemize}
 
-\subsection{IAM - Identity and Access Management (ang. zarządzanie tożsamością i dostępem)}
+\subsection{Amazon IAM - Identity and Access Management (ang. zarządzanie tożsamością i dostępem)}
 Najważniejszymi powodami do wyboru IAM jako usuługi zarządzającej dostępem są:
 
 \begin{itemize}
@@ -202,7 +202,7 @@ Najważniejszymi powodami do wyboru IAM jako usuługi zarządzającej dostępem 
 \item IAM udostępnia centralne zarządzanie tożsamościami i uprawnieniami, przez co upraszcza administrację i dodaje przejrzystości zarządzania dostępem. \cite{aws.iam}
 \end{itemize}
 
-\subsection{S3 - Simple Storage Service (ang. prosty magazyn danych)}
+\subsection{Amazon S3 - Simple Storage Service (ang. prosty magazyn danych)}
 Przechowywanie danych aplikacji to kluczowe zadanie, jakie zostało postawione usłudze S3, a jej wybór został podyktowany następującymi powodami:
 
 \begin{itemize}
@@ -212,7 +212,7 @@ Przechowywanie danych aplikacji to kluczowe zadanie, jakie zostało postawione u
 \item umożliwia optymalizację kosztów na podstawie częstotliwości dostępu do danych i wymagań dotyczących trwałości. \cite{aws.s3}
 \end{itemize}
 
-\subsection{CloudWatch}
+\subsection{Amazon CloudWatch}
 Usługa o nazwie CloudWatch, w szerokim spektrum usług jakie oferuje platforma AWS, dedykowana jest monitorowaniu i logowaniu akcji wykonanych w samych usługach, jak i w kodzie aplikacji. To są powody jakie zostały uwzględnione przy podjęciu decyzji o skorzystaniu z niej:
 
 \begin{itemize}
@@ -220,6 +220,102 @@ Usługa o nazwie CloudWatch, w szerokim spektrum usług jakie oferuje platforma 
 \item oferuje zaawansowane możliwości monitorowania aplikacji i infrastruktury, a także konfigurację alarmów, które powiadamiają o problemach w czasie rzeczywistym,
 \item na podstawie logów zbieranych przez CloudWatch, można zautomatyzować uruchamianie akcji skalowania zasobów, czy też funkcji Lambda. \cite{aws.cloud.watch}
 \end{itemize}
+
+\subsection{Amazon Route 53}
+Jako, iż system modernizowany przez autora niniejszej pracy dyplomowej jest aplikacją internetową, to należy zapewnić mu dostęp do domeny, która będzie propagowoać jego usługi na cały świat. Usługą, w portfolio AWS, która zapewnia takie rozwiązania jest Amazon Route 53. Poniżej przedstawione są najważniejsze powody, które zostały uwzględnione przy dokonaniu wyboru:
+
+\begin{itemize}
+\item wysoka dostępność i niezawodność gwarantowane przez rozproszenie usługi DNS,
+\item elastyczność i skalowalność,
+\item zintegrowane funkcje geolokalizacji,
+\item integracja z innymi, ważnymi z punktu widzenia systemu usługami, takimi jak: Elastic Load Balancing i CloudFront. \cite{aws.route53}
+\end{itemize}
+
+\subsection{Amazon Elastic Load Balancing}
+Oferowana przez firmę Amazon usługa Elastic Load Balancing (ang. elastyczne balansowanie obciążeniem) jest kluczowym elementem każdej aplikacji z uwagi na rozproszenie obciążenia systemu. Niżej przedstawiono wszystkie powody wykorzystania omawianej usługi:
+
+\begin{itemize}
+\item automatycznie rozkładanie ruchu sieciowego między wieloma zasobami,
+\item poprawa dostępności aplikacji poprzez monitorowanie stanu zasobów i automatyczne przekierowanie ruchu do zdrowych instancji,
+\item zarządzanie ruchem na podstawie zawartości, geolokalizacji i opóźnienia między żądanym zasobem,
+\item integracja z AWS Certificate Manager do zarządzania certyfikatami SSL/TLS, a także ochrona przez atakami DDoS i zarządzanie ruchem HTTP/2,
+\item integracja z usługą Auto Scaling (ang. automatyczne skalowanie) oraz CloudWatch. \cite{aws.elb}
+\end{itemize}
+
+\subsection{ACM - AWS Certificate Manager (ang. menadżer certyfikatów AWS)}
+Narzędzie ACM to natywne rozwiązanie chmury AWS oferujące szereg udogodnień istotnych z punktu widzenia cyberbezpieczeństwa, a są nimi:
+
+\begin{itemize}
+\item automatyzacja procesu tworzenia, wdrażania i odnawiania SSL/TLS,
+\item integracja z Elastic Load Balancing (ELB), Amazon CloudFront i API Gateway (ang. bramka API),
+\item bezpłatne utrzymanie certyfikatów SSL/TLS dla domen zarządzanych przez AWS,
+\item łatwość użycia poprzez uproszczenie procesu zarządzania certyfikatami dzięki intuicyjnemu interfejsowi. \cite{aws.acm}
+\end{itemize}
+
+\subsection{Amazon API Gateway (ang. Bramka API Amazon)}
+Usługa Amazon API Gateway została stworzona z myślą o maksymalnym uproszczeniu tworzenia struktury API i łączenia zasobów w jedną całość. Autor niniejszej pracy dyplomowej wykorzystał ją, po uprzednim zgłębieniu jej zalet, a są nimi:
+
+\begin{itemize}
+\item integracja z Amazon Elastic Load Balancing,
+\item zarządzanie ruchem poprzez mechanizm Throttiling Rules (ang. zasady tłumienia),
+\item łatwość tworzenia API i jego wdrożenia,
+\item monitoring operacji wykonywanych wewnątrz API. \cite{aws.api.gateway}
+\end{itemize}
+
+\section{Opracowanie planu migracji}
+Migracja działającego systemu monolitycznego na architekturę mikroserwisów jest wyzwaniem. Wiąże się tym duży koszt wstępny jaki musi ponieść przedsiębiorstwo, by uruchomić szereg koniecznych procesów pozwalających przeprowadzić odpowiednio migrację. Samą migrację należy przeprowadzić w pełnej świadomości i po przeprowadzeniu uprzednio audytu opłacalności tego zabiegu. Zabieg ten wprowadza znaczne skomplikowanie do projektu i wymaga wykwalifikowanej kadry inżynierów, którzy będą w stanie zapewnić ciągłość działania aplikacji w fazach przejściowych, a przy okazji rozwijając nową funkcjonalność.
+W niniejszej pracy dyplomowej migracja zostanie przeprowadzona na systemie hobbystycznym, a co za tym idzie jego ewentualna przerwa w działaniu nie zadziała destrukcyjnie na ewentualne przedsiębiorstwo, które mogłoby ponieść koszta niedziałającej platformy. 
+
+\subsection{Domain-Driven Design}
+W skrócie DDD. Nazwa ta w języku polskim oznacza nacisk na prowadzenie rozwoju oprogramowania w kontekście jakiejś domeny. Jest to filozofia, która ma pomagać rozwiązywać problemy budowy oprogramowania dla skomplikowanych domen \cite{patterns.principles.and.practices.of.ddd}.
+To podejście zakłada podział systemu na komponenty oraz ich zachowania, aby te wiernie odzwierciedlały rzeczywistość. Po wstępnej fazie planowania obszarów systemu następuje przejście do fazy implementacji.
+
+Zadaniem autora w niniejszej pracy dyplomowej było wykorzystanie potencjału jaki został stworzony w jego pracy inżynierskiej. Mianowicie w omawianej pracy system został podzielony w naturalny sposób pośród czterech aktorów, jakimi są: pacjent, lekarz, pracownik recepcji oraz pracownik administracji. W tego podziału wyłania się domena podziału. Każdy aktor ma swój zestaw czynności jakie w swojej domenie może wykonywać. Tak na przykład każdy użytkownik ma prawa do edycji swojego konta, usunięcia go, oraz podglądu danych jakie się w nim znajdują. Przyglądając się funkcjonalności wizyt wyłania się osobna zależność, która jest możliwa do wydzielenia z całości systemu, a dostęp mają do niej aktorzy tacy jak: pacjent, lekarz i pracownik recepcji. Każdy z aktorów ma też swój indywidualny zestaw danych, który jest niezależny od innego z aktorów, co kwalifikuje ten fakt na uwzględnienie go jako podział na cztery dodatkowe domeny. Osobną zależnością jest również sama wysyłka maili, która z punktu widzenia systemu jest istotna, ale bardzo mała porównując zakres czynności jakie wykonuje.
+
+Dalsze działania wynikające z planowania będą bazować bezpośrednio na wytyczonym powyżej podziale. Sam podział nie jest nowy w kontekście całego systemu. Autor zgodnie z sztuką zbudował projekt, tak by w przyszłości móc go rozwinąć właśnie poprzez modyfikację w kierunku mikroserwisów.
+
+\subsection{Zakres migracji}
+Według autora książki “Monolith to Microservices“ należy zrozumieć w jakim zakresie szczegółowa ma być domena, którą próbuje się dzielić na mniejsze części, tak by było to rozsądne \cite{monolith.to.microservices}. Patrz Rysunek~\ref{fig:ddd-sdiwpil}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{includes/images/ddd-sdiwpil.png}
+\captionvspace
+\caption{Zakres domenowy systemu do internetowego wspomagania pacjenta i lekarza}
+\label{fig:ddd-sdiwpil}
+\end{figure}
+
+\subsection{Podejście Event Storming}
+Podejście to polega na zgrupowaniu potencjalnych domen systemu za pośrednictwem akcji jakie wykonują. Tak na przykład w systemie do internetowego wspomagania pacjenta i lekarza da się pogrupować czynności wykonywane w systemie pod kątem wysyłki wiadomości e-mail. Na (Wstaw referencję obrazka) widoczny jest schemat pokazujący, że poszczególne domeny, takie jak: użytkownicy, wizyty są zgrupowane do akcji wysyłania wiadomości drogą mailową. Całość potencjału omawianego podejścia została przedstawiona na Rysunku~\ref{fig:event-storming-approach}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{includes/images/event-storming-approach.png}
+\captionvspace
+\caption{Wysyłka wiadomości jest logicznie połączona dla tego modelu domeny, więc jej dalsza ekstrakcja może być trudna}
+\label{fig:event-storming-approach}
+\end{figure}
+
+\subsection{Przebieg migracji}
+Po fazie planowania należy przejść do fazy, w której mając schemat podzielona zostanie całkowita migracja na fazy, tak by utrzymać ciągłość działania systemu. System uprzednio uruchomiony został w zwirtualizowanym środowisku Vagrant, gdzie miał zainstalowanie, które było proxy (ang. pośrednikiem) zapytań - nginx. W tym samym środowisku uruchomiony był również system do zarządzania relacyjną bazą danych - MySQL. Dodatkowo uruchomiona była tam również logika biznesowa przy pomocy gniazda PHP. Schematyczny obraz fazy pierwszej znajduje się na Rysunku~\ref{fig:migration-phase-1}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{includes/images/migration-phase-1.png}
+\captionvspace
+\caption{Schemat architektury systemu do internetowego wspomagania pacjenta i lekarza w pierwszej fazie}
+\label{fig:migration-phase-1}
+\end{figure}
+
+Wspieranym oprogramowaniem wirtualizującym na środowisku lokalnym i w samym AWS jest Docker. W drugiej fazie migracji wykonano opisanie bazy danych, pośrednika zapytań nginx i logiki biznesowej w osobnych, niezależnych kontenerach, skomunikowanych ze sobą wirtualną siecią. Omawiana zmiana widoczna na Rysunku~\ref{fig:migration-phase-2}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{includes/images/migration-phase-2.png}
+\captionvspace
+\caption{Schemat architektury systemu do internetowego wspomagania pacjenta i lekarza w drugiej fazie}
+\label{fig:migration-phase-2}
+\end{figure}
 
 \bibliographystyle{IEEEtran}
 \bibliography{bibliography.bib}
