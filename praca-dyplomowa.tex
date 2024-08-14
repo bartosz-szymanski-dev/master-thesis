@@ -296,7 +296,10 @@ Podejście to polega na zgrupowaniu potencjalnych domen systemu za pośrednictwe
 \label{fig:event-storming-approach}
 \end{figure}
 
-\subsection{Przebieg migracji}
+\chapter{Przebieg migracji}
+W niniejszym rozdziale autor pracy dyplomowej przedstawił przebieg migracji, dzieląc go na osiem faz pośrednich. Przebieg ten jest odzwierciedleniem nakładu prac wykonanego przez autora na cel migracji systemu. Jest to połowa z potrzebnych działań praktycznych, ponieważ dalsza ich część to uruchomienie infrastruktury chmurowej w AWS.
+
+\section{Faza pierwsza}
 Po fazie planowania należy przejść do fazy, w której mając schemat podzielona zostanie całkowita migracja na fazy, tak by utrzymać ciągłość działania systemu. System uprzednio uruchomiony został w zwirtualizowanym środowisku Vagrant, gdzie miał zainstalowanie, które było proxy (ang. pośrednikiem) zapytań - nginx. W tym samym środowisku uruchomiony był również system do zarządzania relacyjną bazą danych - MySQL. Dodatkowo uruchomiona była tam również logika biznesowa przy pomocy gniazda PHP. Schematyczny obraz fazy pierwszej znajduje się na Rysunku~\ref{fig:migration-phase-1}.
 
 \begin{figure}[ht]
@@ -307,6 +310,7 @@ Po fazie planowania należy przejść do fazy, w której mając schemat podzielo
 \label{fig:migration-phase-1}
 \end{figure}
 
+\section{Faza druga}
 Wspieranym oprogramowaniem wirtualizującym na środowisku lokalnym i w samym AWS jest Docker. W drugiej fazie migracji wykonano opisanie bazy danych, pośrednika zapytań nginx i logiki biznesowej w osobnych, niezależnych kontenerach, skomunikowanych ze sobą wirtualną siecią. Omawiana zmiana widoczna na Rysunku~\ref{fig:migration-phase-2}.
 
 \begin{figure}[ht]
@@ -317,7 +321,87 @@ Wspieranym oprogramowaniem wirtualizującym na środowisku lokalnym i w samym AW
 \label{fig:migration-phase-2}
 \end{figure}
 
-\bibliographystyle{IEEEtran}
+\section{Faza trzecia}
+W fazie trzeciej migracji systemu należy zacząć od domeny użytkownika i wydelegować ją do osobnego mikroserwisu od reszty monolitu, dodatkowo w samym monolicie należy poczynić zmiany, które uzależniają wszystkie czynności należące do zarządzania kontem użytkownika generycznego przetransferować by podlegały walidacji oraz wykonaniu przez mikroserwis. Na schemacie pojawia się zmiana nazewnictwa z “Gniazdo PHP” na “Monolit”, co od teraz symbolizować będzie całość logiki, ponieważ warstwa infrastruktury już nie jest istotna w tym momencie. Dodatkowo w oprogramowaniu pośredniczącym w zapytaniu między użytkownikiem a systemem - nginx należy poczynić zmianę konfiguracji, tak by ta przekazywała zapytania o użytkownika bezpośrednio do odpowiedniego kontenera z mikroserwisem w wirtualnej sieci Docker. W systemie do zarządzania relacyjną bazą danych należy utworzyć bazę danych odpowiadającą za tylko i wyłącznie dane wymagane do utrzymania w systemie przez mikroserwis użytkownika. Wyszczególniona powyżej zmiana została odzwierciedlona na Rysunku~\ref{fig:migration-phase-3}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{includes/images/migration-phase-3.png}
+\captionvspace
+\caption{Schemat architektury systemu do internetowego wspomagania pacjenta i lekarza w trzeciej fazie}
+\label{fig:migration-phase-3}
+\end{figure}
+
+\section{Faza czwarta}
+Faza czwarta migracji aplikacji zawiera w sobie dalszą modyfikację systemu. Początek zmian należy zawrzeć w konfiguracji oprogramowania nginx, gdzie należy przekierować cały ruch odpowiadający za obsługę użytkownika do mikroserwisu pacjenta. Dodatkowo utworzenie nowej bazy danych w systemie do zarządzania bazą danych MySQL. Niniejsza zmiana zwizualizowna została na Rysunku~\ref{fig:migration-phase-4}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{includes/images/migration-phase-4.png}
+\captionvspace
+\caption{Schemat architektury systemu do internetowego wspomagania pacjenta i lekarza w czwartej fazie}
+\label{fig:migration-phase-4}
+\end{figure}
+
+\section{Faza piąta}
+Kolejną fazą migracji jest część piąta, a ta będzie analogiczna do fazy czwartej. W jej skład będzie wchodzić utworzenie mikroserwisu dla pracownika recepcji oraz przekierowanie całego ruchu odpowiadającego za obsługę tej domeny do nowego mikroserwisu. Faza zostanie zakończona utworzeniem nowej bazy danych. Ta zmiana została przedstawiona na Rysunku~\ref{fig:migration-phase-5}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{includes/images/migration-phase-5.png}
+\captionvspace
+\caption{Schemat architektury systemu do internetowego wspomagania pacjenta i lekarza w piątej fazie}
+\label{fig:migration-phase-5}
+\end{figure}
+
+\section{Faza szósta}
+W fazie szóstej dodano już ostatni mikroserwis odpowiadający za domeny związane z pracownikami lub użytkownikami. Utworzono zmiany w konfiguracji oprogramowania nginx oraz dodano bazę danych dla pracownika administracji. Zmiany zostały przedstawione na Rysunku~\ref{fig:migration-phase-6}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{includes/images/migration-phase-6.png}
+\captionvspace
+\caption{Schemat architektury systemu do internetowego wspomagania pacjenta i lekarza w szóstej fazie}
+\label{fig:migration-phase-6}
+\end{figure}
+
+\section{Faza siódma}
+W fazie siódmej migracji dodano mikroserwis odpowiadający za obsługę wizyt. Proces technologiczny wygląda analogicznie do wcześniejszych faz. Wykonano zmianę konfiguracji oprogramowania nginx oraz utworzono nową bazę danych. Zmiany widoczne na Rysunku~\ref{fig:migration-phase-7}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{includes/images/migration-phase-7.png}
+\captionvspace
+\caption{Schemat architektury systemu do internetowego wspomagania pacjenta i lekarza w siódmej fazie}
+\label{fig:migration-phase-7}
+\end{figure}
+
+\section{Faza ósma}
+Ostatnia faza migracji to uruchomienie oprogramowania RabbitMQ, które będzie brokerem komunikatów portu AMQP. Dodatkowo uruchomiono serwis wysyłki maili. Na schemacie nastąpiło usunięcie części systemu określonej jako monolit, a to dlatego, że cały system w obecnym stanie jest już niezależny od jednej całości. Całość przedstawiona na Rysunku~\ref{fig:migration-phase-8}.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{includes/images/migration-phase-8.png}
+\captionvspace
+\caption{Schemat architektury systemu do internetowego wspomagania pacjenta i lekarza w ósmej fazie}
+\label{fig:migration-phase-8}
+\end{figure}
+
+\section{Podsumowanie przebiegu migracji}
+Proces stopniowego ewoluowania projektu monolitycznego w projekt mikroserwisowowy dla systemu do internetowego wspomagania pacjenta i lekarza, jest procesem skomplikowanym. Czas poświęcony na dokonanie takiej migracji to w przybliżeniu 112h. Proces należał jednak do łatwiejszych przez wzgląd na niekomercyjne wykorzystanie systemu, a co za sobą wprowadza mniejsze ryzyko utraty danych lub poważnej awarii całej aplikacji.
+
+\chapter{Bezpieczeństwo systemu}
+
+\section{Poziom zabezpieczeń przed migracją}
+Niniejszy rozdział przedstawia stan poziomu zabezpieczeń przed migracją autora na system mikroserwisowy. Aspektem cechującym wszystkie systemy oparte o architekturę monolityczną jest fakt, że w przypadku awarii jednej usługi wewnątrz monolitu, niesie to ryzyko rozpropagowania awarii na cały system i zaburzenie jego działania. Ocena poziomu zabezpieczeń będzie krytyczna, ale złagodzona przez fakt, iż system nie działa w zakresie komercyjnym.
+
+System do zarządzania bazą danych MySQL posiadał wyeksponowany na cały internet port, po którym potencjalny atakujący mógł przeprowadzić atak typu Brute Force. Atak typu Brute Force polega na próbie odgadnięcia hasła przez generowanie wszystkich możliwych kombinacji ciągu znaków. W teorii można złamać w ten sposób każde hasło \cite{brute.forcre}. Problem ten można rozwiązać na wiele sposóbów, jednak autor tej pracy dyplomowej zastosuje ukrycie bazy danych w prywatnej sieci wewnętrznej, a dostęp do narzędzi administratorskich będzie się odbywać poprzez klucz SSH generowane przy pomocy algorytmów kryptograficznych takich jak RSA lub ECDSA.
+
+Modyfikowana aplikacja omawiana w tej pracy dyplomowej pierwotnie uruchomiona była na porcie HTTP 80, bez dodatkowych zabezpieczeń w postaci ważnego certyfikatu klucza publicznego. Certyfikat ten to informacja o kluczu publicznym podmiotu, która podpisana jest przez zaufaną stronę trzecią i jest niemożliwa do podrobienia \cite{pkn.ssl}. Wynikało to z faktu, iż dla celów akademickich nie istotnym było utworzenie owego certyfikatu i zadbanie o komunikację użytkownika poprzez szyfrowanych kanał na porcie HTTP 443. Kolejnym krokiem do przeprowadzenia odpowiedniej migracji mającej na celu uwzględnienie cyberbezpieczeństwo systemu jest dokonanie zmiany na komunikację szyfrowaną.
+
+Ostateczne problemy wynikające z pomniejszego zaniedbania autora to fakt, iż system nie otrzymywał regularnych aktualizacji zabezpieczeń. W tym celu by zwiększyć poziom bezpieczeństwa należy uruchomić procedurę aktualizacji bibliotek zewnętrznych wykorzystywanych przez framework (ang. zestaw narzędzi) Symfony oraz także przeprowadzić aktualizację wersji interpretera języka programowania PHP.
+
+\bibliographystyle{plain}
 \bibliography{bibliography.bib}
 \listoffigures
 \end{document}
