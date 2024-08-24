@@ -7,6 +7,10 @@
 \usepackage{setspace}
 \usepackage{fancyhdr}
 \usepackage{titlesec}
+\usepackage{array} % Rozszerzenie możliwości tabel
+\usepackage{lscape} % Do ustawienia tabeli na szerokość strony (jeśli jest potrzeba)
+\usepackage{tabularx} % Pakiet do automatycznego dostosowywania szerokości kolumn
+\usepackage{longtable} % Pakiet do tabel rozciągających się na więcej niż jedną stronę
 
 \setmainfont{Times New Roman}
 \setstretch{1.5}
@@ -63,6 +67,7 @@
 \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
 \renewcommand{\cfttoctitlefont}{\bfseries\fontsize{12pt}{14pt}\selectfont}
 \renewcommand{\cftloftitlefont}{\bfseries\fontsize{12pt}{14pt}\selectfont}
+\renewcommand{\listtablename}{Spis tabel}
 
 \setlength{\parindent}{1.25cm}
 
@@ -75,6 +80,19 @@
   name=Rys., % Zmiana nazwy "Rysunek" na "Rys."
   skip=12pt %Ustawienie dolnego odstępu podpisu
 }
+\captionsetup[table]{skip=6pt} % Górny odstęp dla podpisu tabeli
+\captionsetup[table]{position=above} % Pozycja podpisu nad tabelą
+\captionsetup[table]{justification=raggedright, singlelinecheck=false, labelsep=period}
+
+\setlength{\cftbeforelottitleskip}{10pt} % Odstęp przed tytułem spisu tabel
+\setlength{\cftafterlottitleskip}{10pt}  % Odstęp po tytule spisu tabel
+\setlength{\cftbeforeloftitleskip}{10pt} % Jeśli używasz również spisu rysunków
+
+\renewcommand{\cfttabfont}{\normalsize} % Styl numeru tabeli w spisie
+\renewcommand{\cfttabpagefont}{\normalsize} % Styl numeru strony w spisie
+\renewcommand{\cftlottitlefont}{\bfseries\fontsize{12pt}{14pt}\selectfont} % Styl tytułu spisu tabel
+\renewcommand{\cftafterlottitle}{\bfseries\fontsize{12pt}{14pt}\selectfont} % Wyrównanie tytułu do lewej
+
 
 % Dodanie odstępu przed podpisem rysunku
 \newcommand{\captionvspace}{\vspace{6pt}}
@@ -420,8 +438,82 @@ Z perspektywy modelu OSI, będącego standardem komunikacji komputerowej zapropo
 
 W gamie usług AWS, narzędziem zarządzającym i dostarczającym darmowe certyfikaty do szyfrowanej komunikacji jest AWS Certificate Manager (menedżer certyfikatów AWS). Usługa ta ułatwia centralne zarządzanie certyfikatami, zarówno tymi wygenerowanymi przez Amazon, jak i dostarczonymi z zewnątrz. Dodatkowo AWS Certificate Manager bezpiecznie przechowuje certyfikaty, co zwalnia użytkownika korzystającego z usług AWS z odpowiedzialności za weryfikację potencjalnych luk w zabezpieczeniach \cite{aws.acm}.
 
+\section{Zarządzanie danymi}
+Przechowywanie danych w zmodernizowanym systemie do wspomagania pacjenta i lekarza będzie zarządzane przez usługę Amazon RDS. Usługa ta oferuje szyfrowanie danych zarówno w spoczynku, jak i podczas wymiany, co pozytywnie wpływa na poziom zabezpieczeń systemu. Szyfrowanie danych w spoczynku realizowane jest przy użyciu kluczy dostarczonych przez użytkownika. Dane są szyfrowane niezależnie od tego, czy są aktywnie używane, czy przechowywane w kopiach zapasowych bazy danych \cite{aws.rds}.
+
+Mając na uwadze dobro użytkowników systemu, a także regulacje Unii Europejskiej, szczególną uwagę należy zwrócić na zabezpieczenie danych zgodnie z rozporządzeniem o ochronie danych osobowych (RODO). Celem tego rozporządzenia jest harmonizacja prawa w ramach państw członkowskich Unii Europejskiej oraz umożliwienie swobodnego przepływu danych osobowych \cite{giodo}. Amazon potwierdza, że usługi tej firmy są zgodne z RODO, zatem po odpowiednim skonfigurowaniu systemu aplikacja uruchomiona w chmurze obliczeniowej AWS będzie również zgodna z tym rozporządzeniem \cite{aws.gdpr}.
+
+\section{Bezpieczeństwo aplikacji}
+W niniejszym rozdziale omówione zostaną aspekty wewnętrzne bezpieczeństwa aplikacji, między innymi wykorzystanie narzędzia Dependabot, dostarczanego przez firmę GitHub. Narzędzie to oferuje trzy główne funkcjonalności:
+
+\begin{itemize}
+\item alerty informujące o podatnościach występujących w aplikacji,
+\item automatyczne tworzenie w repozytorium kodu Pull Request (ang. prośba o dodanie zmian) z usprawnieniami mającymi na celu likwidację podatności, jeśli jest to możliwe,
+\item automatyczne tworzenie w repozytorium kodu próśb o dodanie zmian z aktualizacją wersji, nawet jeśli nie wykryto podatności.
+\end{itemize}
+
+Aby skorzystać z tego narzędzia, konieczne jest posiadanie repozytorium na platformie GitHub. Autor tej pracy od początku tworzenia projektu korzysta z tej platformy do przechowywania kodu. Po utworzeniu repozytorium należy przejść do jego ustawień, a następnie w zakładce „Security” otworzyć sekcję „Code security and analysis”, gdzie znajduje się przełącznik umożliwiający uruchomienie Dependabota. Po włączeniu narzędzia, Dependabot automatycznie analizuje zależności i strukturę kodu, informując o potencjalnych problemach oraz sugerując ich rozwiązania \cite{github.dependabot}. Na Rysunku~\ref{fig:github-dependabot} przedstawiony przykład komunikatu, który dostarcza GitHub Dependabot.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\textwidth]{includes/images/example-dependabot-notification.png}
+\captionvspace
+\caption{Zrzut ekranu przedstawiający przykładowy komunikat dotyczący podatności dla wersji systemu do wspomagania pacjenta i lekarza przed migracją}
+\label{fig:github-dependabot}
+\end{figure}
+
+Autor, prowadząc rozpoznanie w bazie kodu aplikacji, przeprowadził zarówno analizę pasywną, jak i aktywną. Pasywny rekonesans polegał na zgłębieniu wymagań funkcjonalnych systemu, aby odświeżyć pamięć o czynnościach, które system powinien zapewniać. Dodatkowo, w ramach pasywnej analizy, autor sprawdził domenę sdiwpil.com w rejestrze DNS i zweryfikował informacje oraz jakość zabezpieczeń.
+
+Jednym z mankamentów, który został zidentyfikowany po wprowadzonych przez autora modyfikacjach, jest fakt, że system posiada jednego dostawcę DNS, którym jest Amazon. W celu uniezależnienia systemu od ewentualnej awarii AWS, autor rozważa możliwość rozlokowania wpisów DNS u różnych dostawców. Mimo to, autor wierzy, że Amazon dysponuje szeregiem zabezpieczeń mających na celu zapewnienie redundancji swoich zasobów, co daje pewność, że klienci mogą czuć się bezpiecznie, powierzając każdy detal swojego systemu w rękach specjalistów AWS.
+
+Dalsza część analizy obejmowała rekonesans aktywny, który polegał na zidentyfikowaniu punktów końcowych API, wersji oprogramowania serwera, potencjalnych informacji o modułach PHP, komponentów JavaScript oraz innych szczegółów związanych z architekturą aplikacji.
+
+Aplikacja budowana i modernizowana przez autora nie posiada dokumentacji API, ponieważ jej API jest skierowane na współpracę z warstwą widoku, a nie na udostępnianie usług zewnętrznym klientom. Weryfikacja działania API może być zatem przeprowadzona poprzez symulację komunikacji między warstwą aplikacji a serwerem. Informacje, które można uzyskać bezpośrednio po uruchomieniu strony, obejmują punkty końcowe API związane z rejestracją i logowaniem użytkowników, zasoby statyczne, takie jak zdjęcia, pliki widoku, pliki HTML, CSS i JavaScript. Wymienione punkty końcowe są otwartymi i dostępnymi ścieżkami, które nie wymagają uwierzytelnienia użytkownika. Po zalogowaniu się na konta testowe dla poszczególnych aktorów systemu, ukazuje się pełne spektrum dostępnych ścieżek w systemie, które zostały zamieszczone w tabeli X.X.
+
+\begin{longtable}{|>{\raggedright\arraybackslash}p{3cm}|>{\raggedright\arraybackslash}p{2cm}|>{\raggedright\arraybackslash}p{5cm}|>{\raggedright\arraybackslash}p{3.5cm}|}
+  \caption{Opis punktów końcowych systemu do internetowego wspomagania pacjenta i lekarza} % Podpis tabeli
+  \label{tab:wielkosc_czcionki} \\
+  \hline
+  \textbf{Punkt końcowy API} & \textbf{Dozwolona metoda HTTP} & \textbf{Krótki opis punktu} & \textbf{Aktor posiadający dostęp} \\ \hline
+  \endfirsthead
+
+  \hline
+  \textbf{Punkt końcowy API} & \textbf{Dozwolona metoda HTTP} & \textbf{Krótki opis punktu} & \textbf{Aktor posiadający dostęp} \\ \hline
+  \endhead
+
+  \hline
+  \endfoot
+
+  \hline
+  \endlastfoot
+
+  /login/ & POST & Przesłanie danych logowania i pobieranie tokena uwierzytelniającego. & użytkownik niezalogowany \\ \hline
+  /register/ & POST & Przesłanie danych do utworzenia konta i pobieranie tokena uwierzytelniającego. & użytkownik niezalogowany \\ \hline
+  /patient/ settings/get/ & GET & Pobranie ustawień konta pacjenta. & pacjent \\ \hline
+  /patient/ settings/update/ & PUT i PATCH & Zapisanie ustawień konta pacjenta. & pacjent \\ \hline
+  /appointments/ & GET & Pobranie listy umówionych wizyt. & pacjent, lekarz, pracownik recepcji, pracownik administracji \\ \hline
+  /appointments/ create/ & POST & Utworzenie nowej wizyty. & pacjent, lekarz, pracownik recepcji, pracownik administracji \\ \hline
+  /appointments/ get/{id} & GET & Pobranie szczegółów jednej wizyty. & pacjent, lekarz, pracownik recepcji, pracownik administracji \\ \hline
+  /appointments/ update/{id} & PUT i PATCH & Aktualizacja danych wizyty. & pacjent, lekarz, pracownik recepcji, pracownik administracji \\ \hline
+  /appointments/ delete/{id} & DELETE & Usunięcie danych wizyty. & pacjent, lekarz, pracownik recepcji, pracownik administracji \\ \hline
+  /doctor/ settings/get/ & GET & Pobranie ustawień konta lekarza. & lekarz \\ \hline
+  /doctor/ settings/update/ & PUT i PATCH & Zapisanie ustawień konta lekarza. & lekarz \\ \hline
+  /receptionist/ settings/get/ & GET & Pobranie ustawień konta pracownika recepcji. & pracownik recepcji \\ \hline
+  /receptionist/ settings/update/ & PUT i PATCH & Zapisanie ustawień konta pracownika recepcji. & pracownik recepcji \\ \hline
+  /admin/ settings/get/ & GET & Pobranie ustawień konta pracownika administracji. & pracownik administracji \\ \hline
+  /admin/ settings/update/ & PUT i PATCH & Zapisanie ustawień konta pracownika administracji. & pracownik administracji \\ \hline
+
+\end{longtable}
+
+Autor, kontynuując aktywny rekonesans systemu do internetowego wspomagania pacjenta i lekarza, uzyskał informacje dotyczące serwera pośredniczącego w zapytaniach oraz wersji protokołu HTTP używanej w komunikacji. W celu zdobycia tych danych, autor skorzystał z wbudowanego narzędzia w programie PHPStorm, które umożliwia wykonywanie zapytań HTTP za pośrednictwem swojego interfejsu. Odpowiedź na pytanie, jaki serwer jest pośrednikiem, została przedstawiona na rysunku~\ref{fig:github-dependabot}, a jest to nginx.
+
+Podążając za dobrymi praktykami, autor ukrył w konfiguracji nginx informacje takie jak wersja oprogramowania, aby potencjalny atakujący nie miał ułatwionego zadania poprzez wyszukiwanie luk zabezpieczeń specyficznych dla danej wersji. Dodatkowo został ukryty nagłówek X-Powered-By informujący o wersji PHP 8.3, aby uniemożliwić atakującemu celowanie w konkretne podatności związane z interpreterem PHP lub samym językiem programowania.
+
+Kolejnym krokiem aktywnego rekonesansu będzie analiza plików źródłowych aplikacji. Pierwszym analizowanym plikiem będzie plik konfiguracyjny nginx.
+
 
 \bibliographystyle{plain}
 \bibliography{bibliography.bib}
 \listoffigures
+\listoftables
 \end{document}
