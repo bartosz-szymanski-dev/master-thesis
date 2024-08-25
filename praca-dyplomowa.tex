@@ -211,6 +211,43 @@
 
     Powyżej przedstawiono elementy zestawu narzędzi programistycznych Symfony, które zostały wykorzystane w budowaniu projektu. Zastosowanie tych rozwiązań pozwoliło autorowi skorzystać ze sprawdzonych mechanizmów, które stworzyły bezpieczne środowisko do implementacji założeń biznesowych. Proces implementacji z pewnością byłby trudniejszy bez ich obecności.
 
+    \section{Warstwa widoku}
+
+    Rozdział ten opisuje sposób implementacji warstwy widoku aplikacji. Do przeprowadzenia procesu implementajci zostały wykorzystane narzędzia takie jak:
+
+    \begin{itemize}
+        \item Twig, który jest silnikiem szablonów dla systemów opartych o język programownaia PHP,
+        \item Vue.js, który dedykowany jest tworzeniu interaktywnych interfejsów użytkownika.
+    \end{itemize}
+
+
+    Wybór tych narzędzi został podyktowany personalnymi preferancjami autora pracy. Szablony Twig skłądają się z kilku sekcji, które zostały zdefiniowane przez autora w celu usprawnienia procesu tworzenia. Bazowy szablon przedstawiony jest na rysunku~\ref{fig:twig-base-template} i zawiera on bloki takie jak:
+
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=\textwidth]{includes/images/twig-base-template.png}
+        \captionvspace
+        \caption{Zrzut ekranu przedstawiający przykłady szablon Twig}
+        \label{fig:twig-base-template}
+    \end{figure}
+
+    \begin{itemize}
+        \item \texttt{title} - blok zawierający tytuł strony,
+        \item \texttt{stylesheets} - blok zawierający odwołania do arkuszy stylów,
+        \item \texttt{body} - blok zawierający treść strony,
+        \item \texttt{javascripts} - blok zawierający odwołania do skryptów JavaScript.
+    \end{itemize}
+
+    Na rysunku~\ref{fig:twig-inheriting-template} przedstawiono przykładowy kod szablonu, który dziedziczy po szablonie bazowym.
+
+    \begin{figure}[ht]
+        \centering
+        \includegraphics[width=\textwidth]{includes/images/twig-inheriting-template.png}
+        \captionvspace
+        \caption{Zrzut ekranu przedstawiający przykładowy szablon dziedziczący po szablonie bazowym}
+        \label{fig:twig-inheriting-template}
+    \end{figure}
+
     \chapter{Planowanie architektury mikroserwisowej w chmurze AWS}
     Niniejszy rozdział pokrywa zagadnienie planowania architektury mikroserwisowej oraz wykorzystanych usług potrzebnych do realizacji celu uruchomienia platformy. Nie istnieje mapa działań jakie należy wykonać by zgodnie z sztuką podzielić aplikację monolityczną na zbiór mikroserwisów. Istnieją natomiast wskazówki, którymi można się posługiwać by ułatwić doprowadzenie tego przedsięwzięcia do końca, a są nimi:
 
