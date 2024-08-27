@@ -1,6 +1,6 @@
-\documentclass[12pt,twoside]{book}
-
-\usepackage[a4paper,inner=3.5cm,outer=2.5cm,top=2.5cm,bottom=2.5cm]{geometry}
+\documentclass[12pt,oneside]{book}
+\linespread{1.5}
+\usepackage[a4paper,inner=3cm,outer=2cm,top=2.5cm,bottom=2.5cm]{geometry}
 \usepackage{fontspec}
 \usepackage{polski}
 \usepackage[polish]{babel}
@@ -13,7 +13,6 @@
 \usepackage{longtable} % Pakiet do tabel rozciągających się na więcej niż jedną stronę
 
 \setmainfont{Times New Roman}
-\setstretch{1.5}
 \pagestyle{fancy}
 \fancyhf{}
 \fancyfoot[CE,CO]{\thepage}
@@ -26,23 +25,23 @@
 
 
 % Konfiguracja nagłówków
-% Nagłówek 1. stopnia: 12 pkt, WERSALIKI, pogrubiona
+% Nagłówek 1.
 \titleformat{\chapter}[hang]
-{\normalfont\bfseries\fontsize{12}{14}\selectfont\uppercase}
+{\normalfont\bfseries\fontsize{14}{14}\selectfont\uppercase}
 {\thechapter.}
 {1em}
 {}
 
-% Nagłówek 2. stopnia: 10 pkt, pogrubiona i kursywa
+% Nagłówek 2.
 \titleformat{\section}
-{\normalfont\bfseries\itshape\fontsize{10}{12}\selectfont}
+{\normalfont\bfseries\itshape\fontsize{12}{12}\selectfont}
 {\thesection}
 {1em}
 {}
 
-% Nagłówek 3. stopnia: 10 pkt, kursywa
+% Nagłówek 3.
 \titleformat{\subsection}
-{\normalfont\itshape\fontsize{10}{12}\selectfont}
+{\normalfont\itshape\fontsize{12}{12}\selectfont}
 {\thesubsection}
 {1em}
 {}
@@ -64,9 +63,18 @@
 
 \renewcommand{\contentsname}{Spis treści}
 \renewcommand{\cftchapleader}{\cftdotfill{\cftdotsep}}
-\renewcommand{\cfttoctitlefont}{\bfseries\fontsize{12pt}{14pt}\selectfont}
+\renewcommand{\cfttoctitlefont}{\bfseries\fontsize{12pt}{14pt}\selectfont} % Styl tytułu spisu treści
+\renewcommand{\cftsecfont}{\fontsize{12pt}{14pt}\selectfont} % Rozmiar czcionki dla sekcji w spisie treści
 \renewcommand{\cftloftitlefont}{\bfseries\fontsize{12pt}{14pt}\selectfont}
-\renewcommand{\listtablename}{Spis tabel}
+\renewcommand{\cftsubsecfont}{\fontsize{12pt}{14pt}\selectfont} % Rozmiar czcionki dla podsekcji w spisie treści
+\renewcommand{\cftbeforetoctitleskip}{0pt} % Odstęp przed tytułem spisu treści
+\renewcommand{\cftaftertoctitleskip}{12pt} % Odstęp po tytule spisu treści
+\setlength{\cftbeforesecskip}{6pt} % Odstęp przed każdą sekcją
+\setlength{\cftbeforesubsecskip}{6pt} % Odstęp przed każdą podsekcją
+\setlength{\cftbeforechapskip}{6pt} % Odstęp przed każdym rozdziałem
+
+\renewcommand{\listtablename}{Wykaz tabel}
+
 
 \setlength{\parindent}{1.25cm}
 
@@ -99,11 +107,41 @@
 % Dostosowanie odstępów dla środowiska 'itemize'
 \setlist[itemize]{topsep=0pt,partopsep=0pt}
 
+% Listingi
+\usepackage{listings}
+\usepackage{xcolor}
+
+\renewcommand{\lstlistlistingname}{Wykaz listingów}
+
+\lstset{
+    language=PHP,                % Język programowania, możesz zmienić na inny, np. C++, Java, itd.
+    basicstyle=\ttfamily\footnotesize, % Podstawowy styl czcionki dla kodu
+    numbers=left,                   % Numeracja linii po lewej stronie
+    numberstyle=\tiny,              % Rozmiar czcionki numerów linii
+    stepnumber=1,                   % Każda linia będzie numerowana
+    numbersep=10pt,                 % Odstęp numerów linii od kodu
+    backgroundcolor=\color{white},  % Kolor tła kodu
+    showspaces=false,               % Nie pokazuj znaków spacji
+    showstringspaces=false,         % Nie pokazuj spacji w łańcuchach tekstowych
+    showtabs=false,                 % Nie pokazuj znaków tabulacji
+    frame=single,                   % Ramka wokół kodu
+    rulecolor=\color{black},        % Kolor ramki
+    tabsize=2,                      % Szerokość tabulacji
+    captionpos=b,                   % Pozycja podpisu (b = poniżej)
+    breaklines=true,                % Zawijanie długich linii
+    breakatwhitespace=false,        % Zawijaj linie tylko przy białych znakach
+    keywordstyle=\color{blue},      % Styl słów kluczowych
+    commentstyle=\color{green},     % Styl komentarzy
+    stringstyle=\color{red},        % Styl łańcuchów tekstowych
+    escapeinside={\%*}{*)},         % Możliwość ucieczki do LaTeX w kodzie
+}
+
 \begin{document}
+
 
     \setcounter{page}{1}
     \thispagestyle{empty}
-    \includepdf{includes/pdf/strona_tytułowa.pdf}
+    \includepdf{includes/pdf/strona_tytułowa_v2.pdf}
 
 % Tutaj umieść swoją stronę ze spisem treści
     \tableofcontents
@@ -112,7 +150,6 @@
 
 
     \chapter{Wstęp}
-
 
     \section{Cel pracy}
 
@@ -167,19 +204,115 @@
         \label{fig:symfony-metadata-scheme}
     \end{figure}
 
-    W celu odzwierciedlenia domen aktorów, w projekcie została wykorzystana biblioteka Doctrine, wspierana przez Symfony. Samo Doctrine to narzędzie do manipulacji bazą danych przy wykorzystaniu obiektów PHP \cite{symf.5}. By zainicjować dane w systemie bez konieczności manualnego wprowadzania ich autor wykorzystał dedykowaną ku temu bibliotekę wykorzystującą mechanizm fabryki danych testowych (ang. Fixtures Factory). Sam mechanizm fabryki danych testowych w procesie tworzenia oprogramowania umożliwia uruchomienie systemu z wypełnioną bazą danych, tak by móc przeprowadzać wymagane akcje i sprawdzić poprawność logiki biznesowej \cite{fixtures}. Fabryka kreująca dane testowe zostałą przedstawiona na rysunku~\ref{fig:example-sdiwpil-fixtures-factory}.
+    W celu odzwierciedlenia domen aktorów, w projekcie została wykorzystana biblioteka Doctrine, wspierana przez Symfony. Samo Doctrine to narzędzie do manipulacji bazą danych przy wykorzystaniu obiektów PHP \cite{symf.5}. By zainicjować dane w systemie bez konieczności manualnego wprowadzania ich autor wykorzystał dedykowaną ku temu bibliotekę wykorzystującą mechanizm fabryki danych testowych (ang. Fixtures Factory). Sam mechanizm fabryki danych testowych w procesie tworzenia oprogramowania umożliwia uruchomienie systemu z wypełnioną bazą danych, tak by móc przeprowadzać wymagane akcje i sprawdzić poprawność logiki biznesowej \cite{fixtures}. Fabryka kreująca dane testowe zostałą przedstawiona na listingu~\ref{lst:example-sdiwpil-fixtures-factory}.
 
-    \begin{figure}[ht]
-        \centering
-        \includegraphics[width=\textwidth]{includes/images/example-fixtures-factory-before-migration.png}
-        \captionvspace
-        \caption{Zrzut ekranu przedstawiający przykładową fabrykę danych testowych w Symfony}
-        \label{fig:example-sdiwpil-fixtures-factory}
-    \end{figure}
+\begin{lstlisting}[caption={Przykładowa fabryka danych testowych w Symfony}, label={lst:example-sdiwpil-fixtures-factory}]
+final class ClinicFactory extends ModelFactory
+{
+    #[ArrayShape([
+        'name' => "string",
+        'country' => "string",
+        'city' => "string",
+        'email' => "string",
+        'zipCode' => "string",
+        'streetAddress' => "string"
+    ])] protected function getDefaults(): array
+    {
+        return [
+            'name' => self::faker()->company(),
+            'country' => 'Polska',
+            'city' => 'Kraków',
+            'email' => self::faker()->email(),
+            'zipCode' => $this->getRandomCracowPostCode(),
+            'streetAddress' => self::faker()->streetAddress(),
+        ];
+    }
+
+    protected function initialize(): self
+    {
+// see https://symfony.com/bundles/ZenstruckFoundryBundle/current/index.html#initialization
+        return $this
+// ->afterInstantiate(function(Clinic $clinic): void {})
+            ;
+    }
+
+    protected static function getClass(): string
+    {
+        return Clinic::class;
+    }
+
+    /**
+     * @throws Exception
+     */
+    private function getRandomCracowPostCode(): string
+    {
+        $first = '3';
+        $secondArray = ['0', '1'];
+        $second = $secondArray[array_rand($secondArray)];
+        $result = sprintf('%s%s-', $first, $second);
+        for ($i = 0; $i < 3; $i++) {
+            $result .= random_int(0, 9);
+        }
+
+        return $result;
+    }
+}
+\end{lstlisting}
 
     Do weryfikacji poprawności danych wykorzystano wbudowany w Symfony mechanizm formularzy. Każdy formularz jest tworzony na potrzeby obsługi konkretnego obiektu encji lub specyficznego rodzaju danych, jak na przykład numer PESEL. Formularz przeznaczony do walidacji encji zawiera pola odpowiadające właściwościom tej encji oraz określa typy tych pól. Każde pole może mieć przypisany szereg ustawień, z których najważniejsze jest ustawienie przechowujące tablicę ograniczeń dotyczących wartości przekazywanych do danego pola.
 
-    Wykorzystując ten mechanizm, można na poziomie walidacji danych przeprowadzić weryfikację, czy np. encja z podanymi danymi, które mają być unikalne, znajduje się już w bazie danych. Przykładowy formularz został przedstawiony na rysunku~\ref{fig:example-sdiwpil-form}.
+    Wykorzystując ten mechanizm, można na poziomie walidacji danych przeprowadzić weryfikację, czy np. encja z podanymi danymi, które mają być unikalne, znajduje się już w bazie danych. Przykładowy formularz został przedstawiony na listingu~\ref{lst:example-sdiwpil-form}.
+
+    \begin{lstlisting}[caption={Formularz danych rejestracji}, label={lst:example-sdiwpil-form}]
+abstract class AbstractUserFormType extends AbstractType
+{
+    public function __construct(protected readonly EntityManagerInterface $entityManager)
+    {
+    }
+
+    public function buildForm(FormBuilderInterface $builder, array $options): void
+    {
+        $builder
+            ->add('email', EmailType::class, [
+                'required' => true,
+                'constraints' => [
+                    new NotBlank(),
+                    new Email(),
+                    new Callback([
+                        'callback' => function ($email, ExecutionContextInterface $context) {
+                            $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
+                            if ($user) {
+                                $context->addViolation('Istnieje juz uzytkownik o podanym adresie e-mail');
+                            }
+                        }
+                    ])
+                ],
+            ])
+            ->add('password', RepeatedType::class, [
+                'required' => true,
+                'type' => PasswordType::class,
+                'constraints' => [new NotBlank()],
+            ])
+            ->add('firstName', TextType::class, [
+                'required' => true,
+                'constraints' => [new NotBlank()],
+            ])
+            ->add('secondName', TextType::class, [
+                'required' => true,
+            ])
+            ->add('lastName', TextType::class, [
+                'required' => true,
+                'constraints' => [new NotBlank()],
+            ])
+            ->add('agreeTerms', CheckboxType::class, [
+                'required' => true,
+                'constraints' => [
+                    new IsTrue(),
+                ],
+            ]);
+    }
+}
+    \end{lstlisting}
 
     \begin{figure}[ht]
         \centering
@@ -210,6 +343,7 @@
     \end{figure}
 
     Powyżej przedstawiono elementy zestawu narzędzi programistycznych Symfony, które zostały wykorzystane w budowaniu projektu. Zastosowanie tych rozwiązań pozwoliło autorowi skorzystać ze sprawdzonych mechanizmów, które stworzyły bezpieczne środowisko do implementacji założeń biznesowych. Proces implementacji z pewnością byłby trudniejszy bez ich obecności.
+
 
     \section{Warstwa widoku}
 
@@ -247,6 +381,7 @@
         \caption{Zrzut ekranu przedstawiający przykładowy szablon dziedziczący po szablonie bazowym}
         \label{fig:twig-inheriting-template}
     \end{figure}
+
 
     \chapter{Planowanie architektury mikroserwisowej w chmurze AWS}
     Niniejszy rozdział pokrywa zagadnienie planowania architektury mikroserwisowej oraz wykorzystanych usług potrzebnych do realizacji celu uruchomienia platformy. Nie istnieje mapa działań jakie należy wykonać by zgodnie z sztuką podzielić aplikację monolityczną na zbiór mikroserwisów. Istnieją natomiast wskazówki, którymi można się posługiwać by ułatwić doprowadzenie tego przedsięwzięcia do końca, a są nimi:
@@ -670,6 +805,7 @@
 
     Sama dokumentacja Doctrine przedstawia przykłady, w jaki sposób unikać niebezpiecznych praktyk, które mogłyby prowadzić do tego rodzaju ataków \cite{doctrine.security}. Autor podkreśla, że w zmodernizowanym systemie do wspomagania pacjenta i lekarza, jak również w jego pierwotnej wersji, nie stosowano podejścia, które mogłoby narażać system na atak typu SQL injection.
 
+
     \section{Podsumowanie}
     Bezpieczeństwo każdego systemu działającego w internecie w dużej mierze zależy od uwagi poświęconej podczas jego budowy oraz świadomości inżyniera implementującego konkretną architekturę. Niemniej jednak, obecnie dostępne na rynku rozwiązania i frameworki skutecznie chronią mniej doświadczonych użytkowników przed podstawowymi formami podatności. Tylko świadome odrzucenie tych mechanizmów może narazić system na ryzyko.
 
@@ -680,4 +816,5 @@
     \bibliography{bibliography.bib}
     \listoffigures
     \listoftables
+    \lstlistoflistings
 \end{document}
